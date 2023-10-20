@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
+import Button from "./Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const VisuallyHiddenInput = styled("input")({
@@ -14,14 +14,9 @@ const VisuallyHiddenInput = styled("input")({
     width: 1
 });
 
-export default function FileUploadButton({ selectImage }) {
+export default function FileUploadButton({ selectImage, variant }) {
     return (
-        <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            style={{ backgroundColor: "rgb(131, 21, 249)" }}
-        >
+        <Button component="label" variant={variant} startIcon={<CloudUploadIcon />}>
             Upload file
             <VisuallyHiddenInput type="file" onChange={selectImage} />
         </Button>
