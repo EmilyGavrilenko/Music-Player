@@ -1,16 +1,16 @@
 import Button from "../Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
-const PlayButton = ({ variant, disabled, handlePlayMusic }) => {
+const PlayButton = ({ variant, disabled, playing, handlePlayMusic }) => {
     return (
         <Button
             variant={variant}
             startIcon={<PlayArrowIcon />}
-            disabled={disabled}
+            disabled={disabled || playing}
             sx={{ backgroundColor: variant !== "contained" ? "#fff" : null }}
             onClick={handlePlayMusic}
         >
-            Play Music
+            {playing ? "Playing" : "Play Music"}
         </Button>
     );
 };

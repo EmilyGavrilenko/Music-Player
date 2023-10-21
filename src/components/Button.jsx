@@ -10,15 +10,14 @@ export default function PrimaryButton({
     loading
 }) {
     let sx = {};
-    let baseSx = {
-        "&.Mui-disabled": {
-            backgroundColor: "#8315f9" // Light grey background color
-        }
-    };
+    let baseSx = {};
 
     if (variant === "primary") {
         sx = {
-            backgroundColor: "#8315f9"
+            "backgroundColor": "#8315f9",
+            "&.Mui-disabled": {
+                backgroundColor: "#8315f9" // Light grey background color
+            }
         };
     } else if (variant === "secondary") {
         sx = {

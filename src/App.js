@@ -6,16 +6,21 @@ import MusicImage from "./components/MusicImage";
 import ImageWithLabels from "./components/ImageWithLabels";
 import theme from "./Theme.js";
 import "./App.css";
+import * as Tone from "tone";
 
 // backend
 import { getMusicNoteInference } from "./api/inference.js";
-import { addColorsToLabels, groupPointsByY } from "./utils";
+import { addColorsToLabels, sortMusicNotes } from "./utils";
+import { playNotesWithDurations } from "./utils/music.js";
 
 function App() {
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [notesIdentified, setNotesIdentified] = useState(false);
     const [labels, setLabels] = useState(null);
+    const [playing, setPlaying] = useState(false);
+
+    const synth = new Tone.Synth({ onsilence: () => setPlaying(false) }).toDestination();
 
     const handleChange = (event) => {
         const file = event.target.files[0];
@@ -33,9 +38,9 @@ function App() {
     };
 
     const playMusic = () => {
-        // setNotesIdentified(false);
-        let pointGroups = groupPointsByY(labels);
-        console.log(pointGroups);
+        let sortedLabels = sortMusicNotes(labels);
+        setPlaying(true);
+        playNotesWithDurations(synth, sortedLabels, setPlaying);
     };
 
     const labelNotes = async () => {
@@ -74,6 +79,7 @@ function App() {
                             <PlayButton
                                 variant={notesIdentified ? "primary" : "disabled"}
                                 disabled={!notesIdentified}
+                                playing={playing}
                                 handlePlayMusic={playMusic}
                             />
                         )}

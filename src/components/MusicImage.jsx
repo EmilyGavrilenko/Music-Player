@@ -3,7 +3,7 @@ export default function MusicImage({ image }) {
         <img
             src={image}
             alt="Uploaded"
-            style={{ maxHeight: "40vh", maxWidth: "80vw", marginBottom: "20px" }}
+            style={{ maxHeight: "60vh", maxWidth: "80vw", marginBottom: "20px" }}
         />
     );
 }

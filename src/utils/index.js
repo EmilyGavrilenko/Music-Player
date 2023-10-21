@@ -32,7 +32,7 @@ export function addColorsToLabels(labels) {
     return labels;
 }
 
-export function groupPointsByY(points) {
+export function sortMusicNotes(points) {
     let verticalSort = points.slice().sort((a, b) => a.y - b.y);
     let groups = [];
 
@@ -55,6 +55,8 @@ export function groupPointsByY(points) {
         let horizontalSort = group.slice().sort((a, b) => a.x - b.x);
         return horizontalSort;
     });
+
+    groups = [].concat(...groups);
 
     return groups;
 }
