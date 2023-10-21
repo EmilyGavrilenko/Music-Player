@@ -1,7 +1,20 @@
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-export default function PrimaryButton({ children, variant, startIcon, disabled, onClick }) {
+export default function PrimaryButton({
+    children,
+    variant,
+    startIcon,
+    disabled,
+    onClick,
+    loading
+}) {
     let sx = {};
+    let baseSx = {
+        "&.Mui-disabled": {
+            backgroundColor: "#8315f9" // Light grey background color
+        }
+    };
 
     if (variant === "primary") {
         sx = {
@@ -28,15 +41,16 @@ export default function PrimaryButton({ children, variant, startIcon, disabled, 
     }
 
     return (
-        <Button
+        <LoadingButton
             component="label"
             variant="contained"
             startIcon={startIcon}
-            sx={sx}
+            sx={[baseSx, sx]}
             disabled={disabled}
             onClick={onClick}
+            loading={loading}
         >
             {children}
-        </Button>
+        </LoadingButton>
     );
 }

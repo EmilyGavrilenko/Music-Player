@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import Button from "./components/Button";
-import UploadButton from "./components/UploadButton";
-import MusicImage from "./components/MusicImage";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import "./App.css";
-import theme from "./Theme.js";
+import { UploadButton, LabelButton, PlayButton } from "./components/buttons";
 import { ThemeProvider } from "@mui/material/styles";
+import MusicImage from "./components/MusicImage";
+import ImageWithLabels from "./components/ImageWithLabels";
+import theme from "./Theme.js";
+import "./App.css";
+
+// backend
+import { getMusicNoteInference } from "./api/inference.js";
+import { addColorsToLabels, groupPointsByY } from "./utils";
 
 function App() {
     const [image, setImage] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [notesIdentified, setNotesIdentified] = useState(false);
+    const [labels, setLabels] = useState(null);
 
     const handleChange = (event) => {
         const file = event.target.files[0];
@@ -25,14 +29,24 @@ function App() {
             setImage(null);
         }
         setNotesIdentified(false);
+        setLabels(null);
     };
 
     const playMusic = () => {
-        setNotesIdentified(false);
+        // setNotesIdentified(false);
+        let pointGroups = groupPointsByY(labels);
+        console.log(pointGroups);
     };
 
-    const labelNotes = () => {
+    const labelNotes = async () => {
+        setLoading(true);
+        setLabels(null);
+        let _labels = await getMusicNoteInference(image);
+        _labels = addColorsToLabels(_labels?.predictions ?? []);
+        console.log(_labels);
+        setLabels(_labels);
         setNotesIdentified(true);
+        setLoading(false);
     };
 
     return (
@@ -42,13 +56,18 @@ function App() {
                     <Typography variant="h2" sx={{ mb: 4 }}>
                         Music Player
                     </Typography>
-                    {image && <MusicImage image={image} />}
+                    {image &&
+                        (labels ? (
+                            <ImageWithLabels src={image} labels={labels} />
+                        ) : (
+                            <MusicImage image={image} />
+                        ))}
                     <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
                         {image && (
                             <LabelButton
-                                variant={notesIdentified ? "disabled" : "primary"}
-                                disabled={notesIdentified}
+                                variant={notesIdentified ? "secondary" : "primary"}
                                 handleLabelNotes={labelNotes}
+                                loading={loading}
                             />
                         )}
                         {image && (
@@ -68,32 +87,5 @@ function App() {
         </ThemeProvider>
     );
 }
-
-const LabelButton = ({ variant, disabled, handleLabelNotes }) => {
-    return (
-        <Button
-            variant={variant}
-            startIcon={<MusicNoteIcon />}
-            disabled={disabled}
-            onClick={handleLabelNotes}
-        >
-            Identify Notes
-        </Button>
-    );
-};
-
-const PlayButton = ({ variant, disabled, handlePlayMusic }) => {
-    return (
-        <Button
-            variant={variant}
-            startIcon={<PlayArrowIcon />}
-            disabled={disabled}
-            sx={{ backgroundColor: variant !== "contained" ? "#fff" : null }}
-            onClick={handlePlayMusic}
-        >
-            Play Music
-        </Button>
-    );
-};
 
 export default App;
