@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { UploadButton, LabelButton, PlayButton } from "./components/buttons";
 import { ThemeProvider } from "@mui/material/styles";
 import MusicImage from "./components/MusicImage";
@@ -67,27 +67,41 @@ function App() {
                         ) : (
                             <MusicImage image={image} />
                         ))}
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+                    <Grid
+                        container
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            gap: 2
+                        }}
+                    >
                         {image && (
-                            <LabelButton
-                                variant={notesIdentified ? "secondary" : "primary"}
-                                handleLabelNotes={labelNotes}
-                                loading={loading}
-                            />
+                            <Box sx={{ width: { xs: "90%", sm: "auto" } }}>
+                                <LabelButton
+                                    variant={notesIdentified ? "secondary" : "primary"}
+                                    handleLabelNotes={labelNotes}
+                                    loading={loading}
+                                />
+                            </Box>
                         )}
                         {image && (
-                            <PlayButton
-                                variant={notesIdentified ? "primary" : "disabled"}
-                                disabled={!notesIdentified}
-                                playing={playing}
-                                handlePlayMusic={playMusic}
-                            />
+                            <Box sx={{ width: { xs: "90%", sm: "auto" } }}>
+                                <PlayButton
+                                    variant={notesIdentified ? "primary" : "disabled"}
+                                    disabled={!notesIdentified}
+                                    playing={playing}
+                                    handlePlayMusic={playMusic}
+                                />
+                            </Box>
                         )}
-                        <UploadButton
-                            selectImage={handleChange}
-                            variant={image ? "secondary" : "primary"}
-                        />
-                    </Box>
+                        <Box sx={{ width: { xs: "90%", sm: "auto" } }}>
+                            <UploadButton
+                                selectImage={handleChange}
+                                variant={image ? "secondary" : "primary"}
+                            />
+                        </Box>
+                    </Grid>
                 </header>
             </div>
         </ThemeProvider>
